@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.roquebuarque.gdc.feature.data.entity.TaskDto
 import com.roquebuarque.gdc.feature.presentation.TaskListViewModel
@@ -21,7 +22,7 @@ class MainActivity : AppCompatActivity() {
             TaskListViewModel.TaskViewModelFactory(GdcApplication.instance)
         ).get(TaskListViewModel::class.java)
 
-        viewModel.alltasks.observe(this,{
+        viewModel.alltasks.observe(this, Observer{
             Log.d("MyTaskList", it.toString())
             Toast.makeText(this, it.size.toString(), Toast.LENGTH_LONG).show()
         })
