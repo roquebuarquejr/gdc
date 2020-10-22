@@ -20,6 +20,7 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
     }
 
     buildTypes {
@@ -28,6 +29,15 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
+}
+
+repositories {
+    mavenCentral()
 }
 
 dependencies {
@@ -77,10 +87,15 @@ dependencies {
     //Test
     testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
-    testImplementation "androidx.room:room-testing:$room_version"
-    testImplementation "androidx.arch.core:core-testing:$arch_version"
     testImplementation "androidx.paging:paging-common-ktx:$paging_version"
+    androidTestImplementation 'androidx.test:runner:1.3.0'
+
+    androidTestImplementation "androidx.arch.core:core-testing:$arch_version"
+    androidTestImplementation ('androidx.test.espresso:espresso-core:3.3.0', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+
+    androidTestImplementation "androidx.room:room-testing:$room_version"
 
 
 }
