@@ -1,16 +1,21 @@
-package com.roquebuarque.gdc.feature.task.add
+package com.roquebuarque.gdc.feature.task.add.ui
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
+import com.roquebuarque.gdc.GdcApplication
 import com.roquebuarque.gdc.R
+import com.roquebuarque.gdc.feature.task.add.TaskAddViewModel
+import com.roquebuarque.gdc.feature.task.data.entity.TaskDto
 import kotlinx.android.synthetic.main.activity_task_new.*
 
 class TaskAddActivity : AppCompatActivity() {
+
+    private lateinit var viewModel: TaskAddViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -19,23 +24,21 @@ class TaskAddActivity : AppCompatActivity() {
         //Add arrow back button
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        btnTaskNewSave.setOnClickListener {
-            saveTask()
-        }
-    }
+        viewModel = ViewModelProvider(
+            this,
+            TaskAddViewModel.TaskViewModelFactory(
+                GdcApplication.instance
+            )
+        ).get(TaskAddViewModel::class.java)
 
-    private fun saveTask() {
-        val name = edtTaskNewName.text.toString()
-        if (name.isNotEmpty()) {
-            Intent()
-                .apply {
-                    putExtra(EXTRA_NAME, name)
-                    setResult(Activity.RESULT_OK, this)
-                }.run {
-                    finish()
-                }
-        } else {
-            Snackbar.make(edtTaskNewName, R.string.name_required, Snackbar.LENGTH_LONG).show()
+        btnTaskNewSave.setOnClickListener {
+            val name = edtTaskNewName.text.toString()
+            if (name.isNotEmpty()) {
+                viewModel.insert(TaskDto(name = name))
+                finish()
+            } else {
+                Snackbar.make(edtTaskNewName, R.string.name_required, Snackbar.LENGTH_LONG).show()
+            }
         }
     }
 
@@ -48,9 +51,6 @@ class TaskAddActivity : AppCompatActivity() {
     }
 
     companion object {
-
-        const val EXTRA_NAME = "EXTRA_TASK_DETAIL_NAME"
-
         /**
          * Start [TaskAddActivity]
          * @param context previous activity

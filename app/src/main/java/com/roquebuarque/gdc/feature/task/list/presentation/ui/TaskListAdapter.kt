@@ -27,6 +27,10 @@ class TaskListAdapter internal constructor(
             taskDto = data
             taskItemNameView.text = data.name
             taskItemStatusView.text = data.state
+
+            itemView.setOnClickListener {
+                listener.invoke(taskDto.id)
+            }
         }
 
         override fun onClick(p0: View?) {

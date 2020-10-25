@@ -4,4 +4,5 @@
     <string name="button_save">Save</string>
     <string name="operation_canceled">Operation Canceled</string>
     <string name="name_required">Name is required</string>
+    <string name="task_name_here">Task name here</string>
 </resources>
