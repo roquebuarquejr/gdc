@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
-    tools:context=".feature.presentation.ui.TaskNewActivity">
+    tools:context=".feature.task.add.TaskAddActivity">
 
     <EditText
         android:id="@+id/edtTaskNewName"

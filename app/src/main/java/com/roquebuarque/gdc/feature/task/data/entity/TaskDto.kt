@@ -1,4 +1,4 @@
-package com.roquebuarque.gdc.feature.data.entity
+package com.roquebuarque.gdc.feature.task.data.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

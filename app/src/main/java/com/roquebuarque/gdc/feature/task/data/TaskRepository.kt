@@ -1,10 +1,9 @@
-package com.roquebuarque.gdc.feature.data
+package com.roquebuarque.gdc.feature.task.data
 
-import android.util.Log
 import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
-import com.roquebuarque.gdc.feature.data.entity.TaskDto
-import com.roquebuarque.gdc.feature.data.local.TaskDao
+import com.roquebuarque.gdc.feature.task.data.entity.TaskDto
+import com.roquebuarque.gdc.feature.task.data.local.TaskDao
 
 class TaskRepository private constructor(
     private val localDataSource: TaskDao

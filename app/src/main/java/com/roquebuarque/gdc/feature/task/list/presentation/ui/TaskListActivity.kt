@@ -1,4 +1,4 @@
-package com.roquebuarque.gdc.feature.presentation.ui
+package com.roquebuarque.gdc.feature.task.list.presentation.ui
 
 import android.app.Activity
 import android.content.Intent
@@ -9,9 +9,9 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.roquebuarque.gdc.GdcApplication
 import com.roquebuarque.gdc.R
-import com.roquebuarque.gdc.feature.data.entity.TaskDto
-import com.roquebuarque.gdc.feature.presentation.TaskAction
-import com.roquebuarque.gdc.feature.presentation.TaskListViewModel
+import com.roquebuarque.gdc.feature.task.data.entity.TaskDto
+import com.roquebuarque.gdc.feature.task.add.TaskAddActivity
+import com.roquebuarque.gdc.feature.task.list.presentation.TaskListViewModel
 import kotlinx.android.synthetic.main.activity_task_list.*
 import java.lang.IllegalArgumentException
 
@@ -25,7 +25,11 @@ class TaskListActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_task_list)
 
-        adapter = TaskListAdapter(this, ::taskListClickListener)
+        adapter =
+            TaskListAdapter(
+                this,
+                ::taskListClickListener
+            )
         rvTaskList.adapter = adapter
 
         viewModel = ViewModelProvider(
@@ -36,7 +40,10 @@ class TaskListActivity : AppCompatActivity() {
         setObserver()
 
         fabAddTask.setOnClickListener {
-            val intent = TaskNewActivity.start(this)
+            val intent =
+                TaskAddActivity.start(
+                    this
+                )
             startActivityForResult(intent, newTaskActivityRequestCode)
         }
 
@@ -50,7 +57,7 @@ class TaskListActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (resultCode == Activity.RESULT_OK) {
-            val name = data?.getStringExtra(TaskNewActivity.EXTRA_NAME)
+            val name = data?.getStringExtra(TaskAddActivity.EXTRA_NAME)
                 ?: throw IllegalArgumentException("No name passed by task detail")
 
             when (requestCode) {

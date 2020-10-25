@@ -1,4 +1,4 @@
-package com.roquebuarque.gdc.feature.presentation
+package com.roquebuarque.gdc.feature.task.data
 
 import java.io.Serializable
 

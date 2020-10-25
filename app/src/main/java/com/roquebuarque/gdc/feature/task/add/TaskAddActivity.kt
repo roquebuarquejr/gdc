@@ -1,4 +1,4 @@
-package com.roquebuarque.gdc.feature.presentation.ui
+package com.roquebuarque.gdc.feature.task.add
 
 import android.app.Activity
 import android.content.Context
@@ -10,7 +10,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.roquebuarque.gdc.R
 import kotlinx.android.synthetic.main.activity_task_new.*
 
-class TaskNewActivity : AppCompatActivity() {
+class TaskAddActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,11 +52,11 @@ class TaskNewActivity : AppCompatActivity() {
         const val EXTRA_NAME = "EXTRA_TASK_DETAIL_NAME"
 
         /**
-         * Start [TaskNewActivity]
+         * Start [TaskAddActivity]
          * @param context previous activity
          */
         fun start(context: Context): Intent {
-            return Intent(context, TaskNewActivity::class.java)
+            return Intent(context, TaskAddActivity::class.java)
         }
     }
 }

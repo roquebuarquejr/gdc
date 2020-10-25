@@ -1,10 +1,10 @@
-package com.roquebuarque.gdc.feature.presentation
+package com.roquebuarque.gdc.feature.task.list.presentation
 
 import android.app.Application
 import androidx.lifecycle.*
 import com.roquebuarque.gdc.base.AppDataBase
-import com.roquebuarque.gdc.feature.data.TaskRepository
-import com.roquebuarque.gdc.feature.data.entity.TaskDto
+import com.roquebuarque.gdc.feature.task.data.TaskRepository
+import com.roquebuarque.gdc.feature.task.data.entity.TaskDto
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -38,7 +38,9 @@ class TaskListViewModel (application: Application) : AndroidViewModel(applicatio
 
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return if (modelClass.isAssignableFrom(TaskListViewModel::class.java)) {
-                TaskListViewModel(this.application) as T
+                TaskListViewModel(
+                    this.application
+                ) as T
             } else {
                 throw IllegalArgumentException("ViewModel Not Found")
             }

@@ -1,8 +1,8 @@
-package com.roquebuarque.gdc.feature.data.local
+package com.roquebuarque.gdc.feature.task.data.local
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.roquebuarque.gdc.feature.data.entity.TaskDto
+import com.roquebuarque.gdc.feature.task.data.entity.TaskDto
 
 @Dao
 interface TaskDao {

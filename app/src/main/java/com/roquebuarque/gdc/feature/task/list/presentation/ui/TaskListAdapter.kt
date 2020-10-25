@@ -1,4 +1,4 @@
-package com.roquebuarque.gdc.feature.presentation.ui
+package com.roquebuarque.gdc.feature.task.list.presentation.ui
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.roquebuarque.gdc.R
-import com.roquebuarque.gdc.feature.data.entity.TaskDto
+import com.roquebuarque.gdc.feature.task.data.entity.TaskDto
 
 class TaskListAdapter internal constructor(
     context: Context,

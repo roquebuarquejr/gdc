@@ -6,8 +6,8 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.roquebuarque.gdc.base.AppDataBase
-import com.roquebuarque.gdc.feature.data.entity.TaskDto
-import com.roquebuarque.gdc.feature.data.local.TaskDao
+import com.roquebuarque.gdc.feature.task.data.entity.TaskDto
+import com.roquebuarque.gdc.feature.task.data.local.TaskDao
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
