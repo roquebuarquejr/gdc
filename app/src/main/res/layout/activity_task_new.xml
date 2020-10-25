@@ -4,10 +4,10 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
-    tools:context=".feature.presentation.ui.TaskDetailActivity">
+    tools:context=".feature.presentation.ui.TaskNewActivity">
 
     <EditText
-        android:id="@+id/edtTaskDetailName"
+        android:id="@+id/edtTaskNewName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -20,7 +20,7 @@
         android:textSize="18sp" />
 
     <Button
-        android:id="@+id/btnTaskDetailSave"
+        android:id="@+id/btnTaskNewSave"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"

@@ -10,8 +10,10 @@ import androidx.lifecycle.ViewModelProvider
 import com.roquebuarque.gdc.GdcApplication
 import com.roquebuarque.gdc.R
 import com.roquebuarque.gdc.feature.data.entity.TaskDto
+import com.roquebuarque.gdc.feature.presentation.TaskAction
 import com.roquebuarque.gdc.feature.presentation.TaskListViewModel
 import kotlinx.android.synthetic.main.activity_task_list.*
+import java.lang.IllegalArgumentException
 
 class TaskListActivity : AppCompatActivity() {
 
@@ -23,7 +25,7 @@ class TaskListActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_task_list)
 
-        adapter = TaskListAdapter(this)
+        adapter = TaskListAdapter(this, ::taskListClickListener)
         rvTaskList.adapter = adapter
 
         viewModel = ViewModelProvider(
@@ -34,18 +36,25 @@ class TaskListActivity : AppCompatActivity() {
         setObserver()
 
         fabAddTask.setOnClickListener {
-            val intent = TaskDetailActivity.start(this)
+            val intent = TaskNewActivity.start(this)
             startActivityForResult(intent, newTaskActivityRequestCode)
         }
 
     }
 
+    private fun taskListClickListener(taskId: Long) {
+
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == newTaskActivityRequestCode && resultCode == Activity.RESULT_OK) {
-            data?.getStringExtra(TaskDetailActivity.EXTRA_NAME)?.let {
-                val task = TaskDto(name = it)
-                viewModel.addTask(task)
+
+        if (resultCode == Activity.RESULT_OK) {
+            val name = data?.getStringExtra(TaskNewActivity.EXTRA_NAME)
+                ?: throw IllegalArgumentException("No name passed by task detail")
+
+            when (requestCode) {
+                newTaskActivityRequestCode -> saveNewTask(name)
             }
         } else {
             Toast.makeText(
@@ -54,6 +63,10 @@ class TaskListActivity : AppCompatActivity() {
                 Toast.LENGTH_LONG
             ).show()
         }
+    }
+
+    private fun saveNewTask(name: String) {
+        viewModel.insert(TaskDto(name = name))
     }
 
 

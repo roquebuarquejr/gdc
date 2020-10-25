@@ -6,34 +6,37 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.snackbar.Snackbar
 import com.roquebuarque.gdc.R
-import kotlinx.android.synthetic.main.activity_task_detail.*
+import kotlinx.android.synthetic.main.activity_task_new.*
 
-class TaskDetailActivity : AppCompatActivity() {
+class TaskNewActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_task_detail)
+        setContentView(R.layout.activity_task_new)
 
         //Add arrow back button
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        btnTaskDetailSave.setOnClickListener {
+        btnTaskNewSave.setOnClickListener {
             saveTask()
         }
     }
 
     private fun saveTask() {
-        Intent()
-            .apply {
-                edtTaskDetailName.text.toString()
-                    .also {
-                        putExtra(EXTRA_NAME, it)
-                    }
-                setResult(Activity.RESULT_OK, this)
-            }.run {
-                finish()
-            }
+        val name = edtTaskNewName.text.toString()
+        if (name.isNotEmpty()) {
+            Intent()
+                .apply {
+                    putExtra(EXTRA_NAME, name)
+                    setResult(Activity.RESULT_OK, this)
+                }.run {
+                    finish()
+                }
+        } else {
+            Snackbar.make(edtTaskNewName, R.string.name_required, Snackbar.LENGTH_LONG).show()
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -49,11 +52,11 @@ class TaskDetailActivity : AppCompatActivity() {
         const val EXTRA_NAME = "EXTRA_TASK_DETAIL_NAME"
 
         /**
-         * Start [TaskDetailActivity]
+         * Start [TaskNewActivity]
          * @param context previous activity
          */
         fun start(context: Context): Intent {
-            return Intent(context, TaskDetailActivity::class.java)
+            return Intent(context, TaskNewActivity::class.java)
         }
     }
 }

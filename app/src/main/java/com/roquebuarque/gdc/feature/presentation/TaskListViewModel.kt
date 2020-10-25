@@ -20,7 +20,13 @@ class TaskListViewModel (application: Application) : AndroidViewModel(applicatio
 
     }
 
-    fun addTask(taskDto: TaskDto) {
+    fun insert(taskDto: TaskDto) {
+        viewModelScope.launch(Dispatchers.IO){
+            repository.addTask(taskDto)
+        }
+    }
+
+    fun update(taskDto: TaskDto) {
         viewModelScope.launch(Dispatchers.IO){
             repository.addTask(taskDto)
         }
