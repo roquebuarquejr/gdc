@@ -5,6 +5,7 @@ import androidx.lifecycle.*
 import com.roquebuarque.gdc.base.AppDataBase
 import com.roquebuarque.gdc.feature.data.TaskRepository
 import com.roquebuarque.gdc.feature.data.entity.TaskDto
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class TaskListViewModel (application: Application) : AndroidViewModel(application) {
@@ -20,7 +21,7 @@ class TaskListViewModel (application: Application) : AndroidViewModel(applicatio
     }
 
     fun addTask(taskDto: TaskDto) {
-        viewModelScope.launch{
+        viewModelScope.launch(Dispatchers.IO){
             repository.addTask(taskDto)
         }
     }

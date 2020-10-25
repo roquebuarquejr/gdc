@@ -1,5 +1,6 @@
 package com.roquebuarque.gdc.feature.data
 
+import android.util.Log
 import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
 import com.roquebuarque.gdc.feature.data.entity.TaskDto
@@ -16,7 +17,9 @@ class TaskRepository private constructor(
         localDataSource.insert(taskDto)
     }
 
-    fun getAllTasks(): LiveData<List<TaskDto>> = localDataSource.getAllTasks()
+    fun getAllTasks(): LiveData<List<TaskDto>> {
+      return localDataSource.getAllTasks()
+    }
 
     companion object {
 

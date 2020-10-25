@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    tools:context=".feature.presentation.ui.TaskDetailActivity">
+
+    <EditText
+        android:id="@+id/edtTaskDetailName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:autofillHints="@string/add_task"
+        android:fontFamily="sans-serif-light"
+        android:hint="@string/add_task"
+        android:inputType="textAutoComplete"
+        android:textSize="18sp" />
+
+    <Button
+        android:id="@+id/btnTaskDetailSave"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:text="@string/button_save" />
+
+</LinearLayout>
