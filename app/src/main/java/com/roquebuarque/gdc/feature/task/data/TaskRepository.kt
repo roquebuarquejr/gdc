@@ -26,6 +26,10 @@ class TaskRepository private constructor(
         return localDataSource.getAllTasks()
     }
 
+    fun deleteById(taskId: Long){
+        localDataSource.deleteById(taskId)
+    }
+
     fun getTaskById(taskId: Long): LiveData<TaskDto> = localDataSource.getTaskById(taskId)
 
     companion object {

@@ -5,4 +5,8 @@
     <string name="operation_canceled">Operation Canceled</string>
     <string name="name_required">Name is required</string>
     <string name="task_name_here">Task name here</string>
+    <string name="delete">Delete</string>
+    <string name="update">Update</string>
+    <string name="updated_successful">Task updated</string>
+    <string name="deleted_successful">Task deleted</string>
 </resources>

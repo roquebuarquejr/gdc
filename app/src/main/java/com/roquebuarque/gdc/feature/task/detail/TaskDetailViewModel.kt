@@ -5,15 +5,18 @@ import androidx.lifecycle.*
 import com.roquebuarque.gdc.base.AppDataBase
 import com.roquebuarque.gdc.feature.task.data.TaskRepository
 import com.roquebuarque.gdc.feature.task.data.entity.TaskDto
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class TaskDetailViewModel(application: Application) : AndroidViewModel(application) {
 
     private lateinit var repository: TaskRepository
 
     private val _id = MutableLiveData<Long>()
-    private var _task: LiveData<TaskDto> = _id.switchMap { id ->
-        repository.getTaskById(id)
-    }
+    private var _task: LiveData<TaskDto> = _id
+        .switchMap { id ->
+            repository.getTaskById(id)
+        }
 
     val task: LiveData<TaskDto> = _task
 
@@ -24,6 +27,18 @@ class TaskDetailViewModel(application: Application) : AndroidViewModel(applicati
 
     fun start(id: Long) {
         _id.value = id
+    }
+
+    fun update(taskDto: TaskDto) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.update(taskDto)
+        }
+    }
+
+    fun delete(taskId: Long) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.deleteById(taskId)
+        }
     }
 
 
