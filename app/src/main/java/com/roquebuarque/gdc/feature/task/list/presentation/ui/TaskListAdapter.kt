@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.roquebuarque.gdc.R
+import com.roquebuarque.gdc.base.DateConverters
 import com.roquebuarque.gdc.feature.task.data.entity.TaskDto
 
 class TaskListAdapter internal constructor(
@@ -21,12 +22,14 @@ class TaskListAdapter internal constructor(
         RecyclerView.ViewHolder(itemView), View.OnClickListener {
         private val taskItemNameView: TextView = itemView.findViewById(R.id.txtItemTaskName)
         private val taskItemStatusView: TextView = itemView.findViewById(R.id.txtItemTaskStatus)
+        private val taskItemDateView: TextView = itemView.findViewById(R.id.txtItemTaskDate)
         private lateinit var taskDto: TaskDto
 
         fun bind(data: TaskDto) {
             taskDto = data
             taskItemNameView.text = data.name
             taskItemStatusView.text = data.state
+            taskItemDateView.text = data.date?.toLocalDate().toString()
 
             itemView.setOnClickListener {
                 listener.invoke(taskDto.id)

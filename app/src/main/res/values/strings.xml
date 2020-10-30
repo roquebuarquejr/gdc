@@ -9,4 +9,7 @@
     <string name="update">Update</string>
     <string name="updated_successful">Task updated</string>
     <string name="deleted_successful">Task deleted</string>
+    <string name="delete_all">Delete All</string>
+    <string name="order_by_asc">Order by ASC</string>
+    <string name="order_by_date">Order by Date</string>
 </resources>

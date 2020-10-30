@@ -41,7 +41,6 @@ class TaskDetailViewModel(application: Application) : AndroidViewModel(applicati
         }
     }
 
-
     class TaskViewModelFactory constructor(private val application: Application) :
         ViewModelProvider.Factory {
 
@@ -55,5 +54,4 @@ class TaskDetailViewModel(application: Application) : AndroidViewModel(applicati
             }
         }
     }
-
 }

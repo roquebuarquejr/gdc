@@ -12,6 +12,7 @@ import com.roquebuarque.gdc.R
 import com.roquebuarque.gdc.feature.task.add.TaskAddViewModel
 import com.roquebuarque.gdc.feature.task.data.entity.TaskDto
 import kotlinx.android.synthetic.main.activity_task_new.*
+import org.threeten.bp.OffsetDateTime
 
 class TaskAddActivity : AppCompatActivity() {
 
@@ -34,7 +35,7 @@ class TaskAddActivity : AppCompatActivity() {
         btnTaskNewSave.setOnClickListener {
             val name = edtTaskNewName.text.toString()
             if (name.isNotEmpty()) {
-                viewModel.insert(TaskDto(name = name))
+                viewModel.insert(TaskDto(name = name, date = OffsetDateTime.now()))
                 finish()
             } else {
                 Snackbar.make(edtTaskNewName, R.string.name_required, Snackbar.LENGTH_LONG).show()

@@ -26,6 +26,10 @@ class TaskRepository private constructor(
         return localDataSource.getAllTasks()
     }
 
+    fun deleteAll(){
+        localDataSource.deleteAll()
+    }
+
     fun deleteById(taskId: Long){
         localDataSource.deleteById(taskId)
     }

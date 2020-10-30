@@ -1,6 +1,8 @@
 package com.roquebuarque.gdc.feature.task.list.presentation.ui
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -43,6 +45,20 @@ class TaskListActivity : AppCompatActivity() {
         }
 
     }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_task_list, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.action_delete_all -> viewModel.deleteAll()
+            else -> return super.onOptionsItemSelected(item)
+        }
+        return false
+    }
+
 
     private fun taskListClickListener(taskId: Long) {
         startActivity(TaskDetailActivity.start(this, taskId))

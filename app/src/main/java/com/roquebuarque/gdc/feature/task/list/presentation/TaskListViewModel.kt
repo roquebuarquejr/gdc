@@ -8,7 +8,7 @@ import com.roquebuarque.gdc.feature.task.data.entity.TaskDto
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class TaskListViewModel (application: Application) : AndroidViewModel(application) {
+class TaskListViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repository: TaskRepository
     val alltasks: LiveData<List<TaskDto>>
@@ -20,15 +20,15 @@ class TaskListViewModel (application: Application) : AndroidViewModel(applicatio
 
     }
 
-    fun insert(taskDto: TaskDto) {
-        viewModelScope.launch(Dispatchers.IO){
+    fun update(taskDto: TaskDto) {
+        viewModelScope.launch(Dispatchers.IO) {
             repository.addTask(taskDto)
         }
     }
 
-    fun update(taskDto: TaskDto) {
-        viewModelScope.launch(Dispatchers.IO){
-            repository.addTask(taskDto)
+    fun deleteAll() {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.deleteAll()
         }
     }
 
