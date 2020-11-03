@@ -2,8 +2,6 @@ package com.roquebuarque.gdc.feature.task.data.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import androidx.room.TypeConverters
-import com.roquebuarque.gdc.base.DateConverters
 import org.threeten.bp.OffsetDateTime
 
 @Entity(tableName = "task_table")
