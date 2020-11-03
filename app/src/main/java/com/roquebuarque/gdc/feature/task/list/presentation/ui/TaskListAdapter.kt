@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.roquebuarque.gdc.R
 import com.roquebuarque.gdc.base.DateConverters
+import com.roquebuarque.gdc.extensions.convertToTaskDateDto
 import com.roquebuarque.gdc.feature.task.data.entity.TaskDto
 
 class TaskListAdapter internal constructor(
@@ -29,7 +30,7 @@ class TaskListAdapter internal constructor(
             taskDto = data
             taskItemNameView.text = data.name
             taskItemStatusView.text = data.state
-            taskItemDateView.text = data.date?.toLocalDate().toString()
+            taskItemDateView.text = (data.date?.convertToTaskDateDto()?.getDateTimeSt() ?: "").toString()
 
             itemView.setOnClickListener {
                 listener.invoke(taskDto.id)

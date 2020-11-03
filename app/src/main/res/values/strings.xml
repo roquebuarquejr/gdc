@@ -12,4 +12,7 @@
     <string name="delete_all">Delete All</string>
     <string name="order_by_asc">Order by ASC</string>
     <string name="order_by_date">Order by Date</string>
+    <string name="add_date">Date</string>
+    <string name="add_time">Time</string>
+    <string name="date_not_set">Create task without date</string>
 </resources>

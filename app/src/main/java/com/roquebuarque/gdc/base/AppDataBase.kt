@@ -8,7 +8,7 @@ import androidx.room.TypeConverters
 import com.roquebuarque.gdc.feature.task.data.entity.TaskDto
 import com.roquebuarque.gdc.feature.task.data.local.TaskDao
 
-@Database(entities = [TaskDto::class], version = 3, exportSchema = false)
+@Database(entities = [TaskDto::class], version = 5, exportSchema = false)
 @TypeConverters(DateConverters::class)
 abstract class AppDataBase : RoomDatabase() {
 
