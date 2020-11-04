@@ -14,7 +14,7 @@ interface TaskDao {
     fun getTaskById(id: Long): LiveData<TaskDto>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(taskDto: TaskDto) : Long
+    fun insert(taskDto: TaskDto): Long
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
     fun update(taskDto: TaskDto)
@@ -24,4 +24,7 @@ interface TaskDao {
 
     @Query("DELETE FROM task_table WHERE id = :id")
     fun deleteById(id: Long)
+
+    @Query("SELECT * FROM task_table ORDER BY date ASC")
+    fun getAllTaskOrderByDate(): LiveData<List<TaskDto>>
 }

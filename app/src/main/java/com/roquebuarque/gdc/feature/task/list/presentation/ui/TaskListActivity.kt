@@ -10,6 +10,7 @@ import com.roquebuarque.gdc.GdcApplication
 import com.roquebuarque.gdc.R
 import com.roquebuarque.gdc.feature.task.add.ui.TaskAddActivity
 import com.roquebuarque.gdc.feature.task.detail.ui.TaskDetailActivity
+import com.roquebuarque.gdc.feature.task.list.presentation.FilterIntent
 import com.roquebuarque.gdc.feature.task.list.presentation.TaskListViewModel
 import kotlinx.android.synthetic.main.activity_task_list.*
 
@@ -54,6 +55,8 @@ class TaskListActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_delete_all -> viewModel.deleteAll()
+            R.id.action_order_date -> viewModel.filter(FilterIntent.DATE)
+            R.id.action_order_abc -> viewModel.filter(FilterIntent.ASC)
             else -> return super.onOptionsItemSelected(item)
         }
         return false

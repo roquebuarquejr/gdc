@@ -10,14 +10,26 @@ import kotlinx.coroutines.launch
 
 class TaskListViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val repository: TaskRepository
-    val alltasks: LiveData<List<TaskDto>>
+    private lateinit var repository: TaskRepository
+    private val _filter = MutableLiveData<FilterIntent>()
+
+    private val _alltasks : LiveData<List<TaskDto>> = _filter
+    .switchMap {
+        when (it) {
+            FilterIntent.ASC -> repository.getAllTasks()
+            FilterIntent.DATE -> repository.getAllTaskOrderByDate()
+            else -> {
+                throw java.lang.IllegalArgumentException("Unknown filter option $it")
+            }
+        }
+    }
+
+    val alltasks: LiveData<List<TaskDto>> = _alltasks
 
     init {
         val dao = AppDataBase.getDataBase(application).taskDao()
         repository = TaskRepository.create(dao)
-        alltasks = repository.getAllTasks()
-
+        filter(FilterIntent.ASC)
     }
 
     fun update(taskDto: TaskDto) {
@@ -32,6 +44,9 @@ class TaskListViewModel(application: Application) : AndroidViewModel(application
         }
     }
 
+    fun filter(intent: FilterIntent){
+        _filter.value = intent
+    }
 
     class TaskViewModelFactory constructor(private val application: Application) :
         ViewModelProvider.Factory {
@@ -46,6 +61,12 @@ class TaskListViewModel(application: Application) : AndroidViewModel(application
             }
         }
     }
+}
+
+
+enum class FilterIntent{
+    ASC,
+    DATE
 }
 
 

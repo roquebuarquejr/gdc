@@ -15,7 +15,7 @@ data class TaskDateDto(
     }
 
     fun isTimeReady(): Boolean {
-        return minute != 0 && hour != 0
+        return hour != 0
     }
 
     fun getDateTimeSt(): String {

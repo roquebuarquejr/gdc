@@ -26,6 +26,10 @@ class TaskRepository private constructor(
         return localDataSource.getAllTasks()
     }
 
+    fun getAllTaskOrderByDate(): LiveData<List<TaskDto>> {
+        return localDataSource.getAllTaskOrderByDate()
+    }
+
     fun deleteAll(){
         localDataSource.deleteAll()
     }
