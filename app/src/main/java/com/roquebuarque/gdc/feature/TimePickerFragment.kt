@@ -20,8 +20,7 @@ class TimePickerFragment : DialogFragment() {
 
         // Create a new instance of TimePickerDialog and return it
         return TimePickerDialog(
-            activity, timeListener, hour, minute,
-            DateFormat.is24HourFormat(activity)
+            activity, timeListener, hour, minute, true
         )
     }
 

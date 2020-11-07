@@ -20,6 +20,9 @@
 
         <activity android:name=".feature.task.add.ui.TaskAddActivity"/>
         <activity android:name=".feature.task.detail.ui.TaskDetailActivity"/>
+        
+        <service android:name=".job.NotificationJobService"
+            android:permission="android.permission.BIND_JOB_SERVICE"/>
     </application>
 
 </manifest>

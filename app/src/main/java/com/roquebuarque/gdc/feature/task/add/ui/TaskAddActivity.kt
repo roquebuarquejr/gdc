@@ -3,9 +3,13 @@ package com.roquebuarque.gdc.feature.task.add.ui
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.app.job.JobInfo
+import android.app.job.JobScheduler
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.view.MenuItem
 import android.widget.DatePicker
 import android.widget.TimePicker
@@ -21,8 +25,10 @@ import com.roquebuarque.gdc.feature.TimePickerFragment
 import com.roquebuarque.gdc.feature.task.add.TaskAddViewModel
 import com.roquebuarque.gdc.feature.task.data.entity.TaskDateDto
 import com.roquebuarque.gdc.feature.task.data.entity.TaskDto
+import com.roquebuarque.gdc.job.NotificationJobService
 import kotlinx.android.synthetic.main.activity_task_new.*
 import org.threeten.bp.OffsetDateTime
+import org.threeten.bp.temporal.ChronoUnit
 
 class TaskAddActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
     TimePickerDialog.OnTimeSetListener {
@@ -47,15 +53,19 @@ class TaskAddActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
         btnTaskNewSave.setOnClickListener {
             val name = edtTaskNewName.text.toString()
             if (name.isNotEmpty()) {
+                var taskDto = TaskDto(name = name)
                 var offsetDateTime: OffsetDateTime? = null
                 if (taskDate.isDateReady() && taskDate.isTimeReady()) {
                     offsetDateTime = setTaskDateTime(taskDate)
+
+                    taskDto = taskDto.copy(date = offsetDateTime)
+
+                    createScheduler(taskDto)
                 } else {
                     Toast.makeText(this, R.string.date_not_set, Toast.LENGTH_LONG)
                         .show()
                 }
-
-                viewModel.insert(TaskDto(name = name, date = offsetDateTime))
+                viewModel.insert(taskDto)
                 finish()
 
             } else {
@@ -71,6 +81,30 @@ class TaskAddActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
             showTimePickerDialog()
         }
     }
+
+    private fun createScheduler(taskDto: TaskDto) {
+        //Create scheduler from system
+        val scheduler = getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
+        val serviceName = ComponentName(packageName, NotificationJobService::class.java.name)
+
+        //Calculating time
+        val timeTilFuture = ChronoUnit.MILLIS.between(OffsetDateTime.now(), taskDto.date)
+
+        //Create schedule build info
+        val builder = JobInfo.Builder(0, serviceName)
+            .setMinimumLatency(timeTilFuture)
+
+        //Create extras
+        val extras = PersistableBundle()
+        extras.putString(SCHEDULE_EXTRA_TASK_NAME, taskDto.name)
+
+        //Build and schedule job
+        val jobInfo = builder.setExtras(extras)
+            .build()
+
+        scheduler.schedule(jobInfo)
+    }
+
 
     private fun showTimePickerDialog() {
         val newFragment: DialogFragment = TimePickerFragment.newInstance(this)
@@ -116,6 +150,9 @@ class TaskAddActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
     }
 
     companion object {
+
+        const val SCHEDULE_EXTRA_TASK_NAME = "SCHEDULE_EXTRA_TASK_NAME"
+
         /**
          * Start [TaskAddActivity]
          * @param context previous activity
