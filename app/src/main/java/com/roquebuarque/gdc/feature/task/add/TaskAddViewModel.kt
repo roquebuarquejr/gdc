@@ -8,18 +8,19 @@ import com.roquebuarque.gdc.feature.task.data.entity.TaskDto
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class TaskAddViewModel(application: Application): AndroidViewModel(application)  {
+class TaskAddViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repository: TaskRepository
+    val taskId = MutableLiveData<Long>()
 
     init {
         val dao = AppDataBase.getDataBase(application).taskDao()
         repository = TaskRepository.create(dao)
     }
 
-    fun insert(taskDto: TaskDto){
+    fun insert(taskDto: TaskDto) {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.addTask(taskDto)
+            taskId.postValue(repository.addTask(taskDto))
         }
     }
 

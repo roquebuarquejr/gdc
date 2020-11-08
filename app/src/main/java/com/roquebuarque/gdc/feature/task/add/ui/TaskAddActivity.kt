@@ -16,6 +16,7 @@ import android.widget.TimePicker
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
 import com.roquebuarque.gdc.GdcApplication
@@ -35,6 +36,7 @@ class TaskAddActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
 
     private lateinit var viewModel: TaskAddViewModel
     private var taskDate: TaskDateDto = TaskDateDto()
+    private lateinit var taskDto: TaskDto
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,21 +55,8 @@ class TaskAddActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
         btnTaskNewSave.setOnClickListener {
             val name = edtTaskNewName.text.toString()
             if (name.isNotEmpty()) {
-                var taskDto = TaskDto(name = name)
-                var offsetDateTime: OffsetDateTime? = null
-                if (taskDate.isDateReady() && taskDate.isTimeReady()) {
-                    offsetDateTime = setTaskDateTime(taskDate)
-
-                    taskDto = taskDto.copy(date = offsetDateTime)
-
-                    createScheduler(taskDto)
-                } else {
-                    Toast.makeText(this, R.string.date_not_set, Toast.LENGTH_LONG)
-                        .show()
-                }
+                taskDto = TaskDto(name = name, date = setTaskDateTime(taskDate))
                 viewModel.insert(taskDto)
-                finish()
-
             } else {
                 Snackbar.make(edtTaskNewName, R.string.name_required, Snackbar.LENGTH_LONG).show()
             }
@@ -80,6 +69,20 @@ class TaskAddActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
         txtTaskNewTime.setOnClickListener {
             showTimePickerDialog()
         }
+
+        setupObserver()
+    }
+
+    private fun setupObserver() {
+        viewModel.taskId.observe(this, Observer {
+            if (taskDate.isDateReady() && taskDate.isTimeReady()) {
+                createScheduler(taskDto.copy(id = it))
+            } else {
+                Toast.makeText(this, R.string.date_not_set, Toast.LENGTH_LONG)
+                    .show()
+            }
+            finish()
+        })
     }
 
     private fun createScheduler(taskDto: TaskDto) {
@@ -91,7 +94,7 @@ class TaskAddActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
         val timeTilFuture = ChronoUnit.MILLIS.between(OffsetDateTime.now(), taskDto.date)
 
         //Create schedule build info
-        val builder = JobInfo.Builder(0, serviceName)
+        val builder = JobInfo.Builder(taskDto.id.toInt(), serviceName)
             .setMinimumLatency(timeTilFuture)
 
         //Create extras
@@ -136,17 +139,19 @@ class TaskAddActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
         txtTaskNewTime.text = "$hourOfDay:$minute"
     }
 
-    private fun setTaskDateTime(taskDateDto: TaskDateDto): OffsetDateTime {
-        return OffsetDateTime.of(
-            taskDateDto.year,
-            taskDateDto.month,
-            taskDateDto.day,
-            taskDateDto.hour,
-            taskDateDto.minute,
-            0,
-            0,
-            OffsetDateTime.now().offset
-        )
+    private fun setTaskDateTime(taskDateDto: TaskDateDto): OffsetDateTime? {
+        return taskDateDto.takeIf { it.isTimeReady() && it.isDateReady() }?.let {
+            OffsetDateTime.of(
+                it.year,
+                it.month,
+                it.day,
+                it.hour,
+                it.minute,
+                0,
+                0,
+                OffsetDateTime.now().offset
+            )
+        }
     }
 
     companion object {
