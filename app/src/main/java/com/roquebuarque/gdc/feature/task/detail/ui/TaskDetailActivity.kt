@@ -1,5 +1,6 @@
 package com.roquebuarque.gdc.feature.task.detail.ui
 
+import android.app.job.JobScheduler
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -20,7 +21,6 @@ import com.roquebuarque.gdc.feature.task.data.entity.Status.*
 import com.roquebuarque.gdc.feature.task.data.entity.TaskDto
 import com.roquebuarque.gdc.feature.task.detail.TaskDetailViewModel
 import kotlinx.android.synthetic.main.activity_task_detail.*
-import kotlinx.android.synthetic.main.activity_task_new.*
 
 
 class TaskDetailActivity : AppCompatActivity() {
@@ -28,6 +28,7 @@ class TaskDetailActivity : AppCompatActivity() {
     private lateinit var viewModel: TaskDetailViewModel
     private lateinit var selectedTask: TaskDto
     private lateinit var selectedStatus: String
+    private  var taskId : Long = 0
 
     private val status = arrayOf(
         TODO.name,
@@ -64,8 +65,8 @@ class TaskDetailActivity : AppCompatActivity() {
             }
         })
 
-        val id = intent.getLongExtra(EXTRA_TASK_ID, 0)
-        viewModel.start(id)
+        taskId = intent.getLongExtra(EXTRA_TASK_ID, 0)
+        viewModel.start(taskId)
 
         btnUpdate.setOnClickListener {
             val name = edtTaskDetailName.text.toString()
@@ -114,11 +115,22 @@ class TaskDetailActivity : AppCompatActivity() {
         }
     }
 
+    private fun cancelJobScheduler(){
+        val scheduler = getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
+
+        scheduler.allPendingJobs.forEach {
+            if(it.id == taskId.toInt()){
+                scheduler.cancel(it.id)
+            }
+        }
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> finish()
             R.id.action_delete -> {
                 viewModel.task.removeObservers(this)
+                cancelJobScheduler()
                 viewModel.delete(selectedTask.id)
                 Snackbar.make(btnUpdate, R.string.deleted_successful, Snackbar.LENGTH_LONG).show()
                 finish()
