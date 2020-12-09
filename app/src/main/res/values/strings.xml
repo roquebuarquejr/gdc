@@ -15,4 +15,6 @@
     <string name="add_date">Date</string>
     <string name="add_time">Time</string>
     <string name="date_not_set">Create task without date</string>
+    <string name="menu_task_list">Tasks</string>
+    <string name="menu_settings">Settings</string>
 </resources>

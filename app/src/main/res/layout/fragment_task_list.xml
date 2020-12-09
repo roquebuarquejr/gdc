@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".feature.task.list.presentation.ui.TaskListActivity">
+    tools:context=".feature.task.list.presentation.ui.MainActivity">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvTaskList"

@@ -12,7 +12,7 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.roquebuarque.gdc.R
 import com.roquebuarque.gdc.feature.task.add.ui.TaskAddActivity
-import com.roquebuarque.gdc.feature.task.list.presentation.ui.TaskListActivity
+import com.roquebuarque.gdc.feature.task.list.presentation.ui.MainActivity
 
 
 /**
@@ -109,7 +109,7 @@ class NotificationJobService : JobService() {
 
         // Set up the pending intent that is delivered when the notification
         // is clicked.
-        val notificationIntent = Intent(this, TaskListActivity::class.java)
+        val notificationIntent = Intent(this, MainActivity::class.java)
         val notificationPendingIntent = PendingIntent.getActivity(
             this, NOTIFICATION_ID, notificationIntent,
             PendingIntent.FLAG_UPDATE_CURRENT
