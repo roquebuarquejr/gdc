@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.work.*
 import com.google.android.material.snackbar.Snackbar
 import com.roquebuarque.gdc.GdcApplication
 import com.roquebuarque.gdc.R
@@ -27,9 +28,11 @@ import com.roquebuarque.gdc.feature.task.add.TaskAddViewModel
 import com.roquebuarque.gdc.feature.task.data.entity.TaskDateDto
 import com.roquebuarque.gdc.feature.task.data.entity.TaskDto
 import com.roquebuarque.gdc.job.NotificationJobService
+import com.roquebuarque.gdc.job.NotificationWorkManager
 import kotlinx.android.synthetic.main.activity_task_new.*
 import org.threeten.bp.OffsetDateTime
 import org.threeten.bp.temporal.ChronoUnit
+import java.util.concurrent.TimeUnit
 
 class TaskAddActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
     TimePickerDialog.OnTimeSetListener {
@@ -37,6 +40,8 @@ class TaskAddActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
     private lateinit var viewModel: TaskAddViewModel
     private var taskDate: TaskDateDto = TaskDateDto()
     private lateinit var taskDto: TaskDto
+    private val workManager = WorkManager.getInstance(application)
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -76,7 +81,7 @@ class TaskAddActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
     private fun setupObserver() {
         viewModel.taskId.observe(this, Observer {
             if (taskDate.isDateReady() && taskDate.isTimeReady()) {
-                createScheduler(taskDto.copy(id = it))
+                createWorkManager(taskDto.copy(id = it))
             } else {
                 Toast.makeText(this, R.string.date_not_set, Toast.LENGTH_LONG)
                     .show()
@@ -106,6 +111,22 @@ class TaskAddActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
             .build()
 
         scheduler.schedule(jobInfo)
+    }
+
+    private fun createWorkManager(taskDto: TaskDto){
+
+        //Calculating time
+        val timeTilFuture = ChronoUnit.MILLIS.between(OffsetDateTime.now(), taskDto.date)
+
+        //extras
+        val data = Data.Builder()
+        data.putString(SCHEDULE_EXTRA_TASK_NAME, taskDto.name)
+
+        val work = OneTimeWorkRequest.Builder(NotificationWorkManager::class.java)
+            .setInitialDelay(timeTilFuture, TimeUnit.MILLISECONDS)
+            .setInputData(data.build())
+            .build()
+        workManager.enqueue(work)
     }
 
 
