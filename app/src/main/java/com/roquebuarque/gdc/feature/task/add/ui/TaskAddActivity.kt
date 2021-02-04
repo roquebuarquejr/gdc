@@ -96,7 +96,7 @@ class TaskAddActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
 
 
         val data = Data.Builder()
-       // data.putString(SCHEDULE_EXTRA_TASK_NAME, taskDto.name)
+        data.putString(SCHEDULE_EXTRA_TASK_NAME, taskDto.name)
 
 
         val workRequest = OneTimeWorkRequest.Builder(NotificationWorkManager::class.java)

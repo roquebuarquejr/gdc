@@ -17,4 +17,7 @@
     <string name="date_not_set">Create task without date</string>
     <string name="menu_task_list">Tasks</string>
     <string name="menu_settings">Settings</string>
+    <string name="notification_channel_name">Task</string>
+    <string name="notification_channel_description">Notification to remember you about your task</string>
+    <string name="notification_text">Let\'s get it done</string>
 </resources>
