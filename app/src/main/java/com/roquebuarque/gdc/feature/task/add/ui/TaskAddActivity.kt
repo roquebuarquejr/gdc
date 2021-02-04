@@ -40,8 +40,8 @@ class TaskAddActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
     private lateinit var viewModel: TaskAddViewModel
     private var taskDate: TaskDateDto = TaskDateDto()
     private lateinit var taskDto: TaskDto
-    private val workManager = WorkManager.getInstance(application)
 
+    private val workManager = WorkManager.getInstance(application)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -79,7 +79,7 @@ class TaskAddActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
     }
 
     private fun setupObserver() {
-        viewModel.taskId.observe(this, Observer {
+        viewModel.taskId.observe(this, {
             if (taskDate.isDateReady() && taskDate.isTimeReady()) {
                 createWorkManager(taskDto.copy(id = it))
             } else {
@@ -90,45 +90,24 @@ class TaskAddActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
         })
     }
 
-    private fun createScheduler(taskDto: TaskDto) {
-        //Create scheduler from system
-        val scheduler = getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
-        val serviceName = ComponentName(packageName, NotificationJobService::class.java.name)
+    private fun createWorkManager(task: TaskDto) {
 
-        //Calculating time
-        val timeTilFuture = ChronoUnit.MILLIS.between(OffsetDateTime.now(), taskDto.date)
+        val timeTilFuture = ChronoUnit.MILLIS.between(OffsetDateTime.now(), task.date)
 
-        //Create schedule build info
-        val builder = JobInfo.Builder(taskDto.id.toInt(), serviceName)
-            .setMinimumLatency(timeTilFuture)
 
-        //Create extras
-        val extras = PersistableBundle()
-        extras.putString(SCHEDULE_EXTRA_TASK_NAME, taskDto.name)
-
-        //Build and schedule job
-        val jobInfo = builder.setExtras(extras)
-            .build()
-
-        scheduler.schedule(jobInfo)
-    }
-
-    private fun createWorkManager(taskDto: TaskDto){
-
-        //Calculating time
-        val timeTilFuture = ChronoUnit.MILLIS.between(OffsetDateTime.now(), taskDto.date)
-
-        //extras
         val data = Data.Builder()
-        data.putString(SCHEDULE_EXTRA_TASK_NAME, taskDto.name)
+       // data.putString(SCHEDULE_EXTRA_TASK_NAME, taskDto.name)
 
-        val work = OneTimeWorkRequest.Builder(NotificationWorkManager::class.java)
+
+        val workRequest = OneTimeWorkRequest.Builder(NotificationWorkManager::class.java)
             .setInitialDelay(timeTilFuture, TimeUnit.MILLISECONDS)
             .setInputData(data.build())
+            .addTag(taskDto.id.toString())
             .build()
-        workManager.enqueue(work)
-    }
 
+        workManager.enqueue(workRequest)
+
+    }
 
     private fun showTimePickerDialog() {
         val newFragment: DialogFragment = TimePickerFragment.newInstance(this)
