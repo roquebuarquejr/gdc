@@ -3,20 +3,15 @@ package com.roquebuarque.gdc.feature.task.add.ui
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
-import android.app.job.JobInfo
-import android.app.job.JobScheduler
-import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.view.MenuItem
 import android.widget.DatePicker
 import android.widget.TimePicker
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.work.*
 import com.google.android.material.snackbar.Snackbar
@@ -27,7 +22,6 @@ import com.roquebuarque.gdc.feature.TimePickerFragment
 import com.roquebuarque.gdc.feature.task.add.TaskAddViewModel
 import com.roquebuarque.gdc.feature.task.data.entity.TaskDateDto
 import com.roquebuarque.gdc.feature.task.data.entity.TaskDto
-import com.roquebuarque.gdc.job.NotificationJobService
 import com.roquebuarque.gdc.job.NotificationWorkManager
 import kotlinx.android.synthetic.main.activity_task_new.*
 import org.threeten.bp.OffsetDateTime
@@ -96,8 +90,8 @@ class TaskAddActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
 
 
         val data = Data.Builder()
-        data.putString(EXTRA_TASK_NAME, taskDto.name)
-        data.putLong(EXTRA_TASK_ID, taskDto.id)
+        data.putString(EXTRA_TASK_NAME, task.name)
+        data.putLong(EXTRA_TASK_ID, task.id)
 
 
         val workRequest = OneTimeWorkRequest.Builder(NotificationWorkManager::class.java)

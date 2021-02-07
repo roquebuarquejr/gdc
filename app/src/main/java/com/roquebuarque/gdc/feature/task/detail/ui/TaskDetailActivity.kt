@@ -1,5 +1,6 @@
 package com.roquebuarque.gdc.feature.task.detail.ui
 
+import android.app.NotificationManager
 import android.app.job.JobScheduler
 import android.content.Context
 import android.content.Intent
@@ -20,6 +21,7 @@ import com.roquebuarque.gdc.R
 import com.roquebuarque.gdc.feature.task.data.entity.Status.*
 import com.roquebuarque.gdc.feature.task.data.entity.TaskDto
 import com.roquebuarque.gdc.feature.task.detail.TaskDetailViewModel
+import com.roquebuarque.gdc.job.NotificationUtil
 import kotlinx.android.synthetic.main.activity_task_detail.*
 
 
@@ -49,11 +51,12 @@ class TaskDetailActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(
             this,
             TaskDetailViewModel.TaskViewModelFactory(
-                GdcApplication.instance
+                GdcApplication.instance,
+                NotificationUtil
             )
         ).get(TaskDetailViewModel::class.java)
 
-        viewModel.task.observe(this, Observer {
+        viewModel.task.observe(this, {
             selectedTask = it
             edtTaskDetailName.setText(it.name)
 
@@ -115,23 +118,12 @@ class TaskDetailActivity : AppCompatActivity() {
         }
     }
 
-    private fun cancelJobScheduler(){
-        val scheduler = getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
-
-        scheduler.allPendingJobs.forEach {
-            if(it.id == taskId.toInt()){
-                scheduler.cancel(it.id)
-            }
-        }
-    }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> finish()
             R.id.action_delete -> {
                 viewModel.task.removeObservers(this)
-                cancelJobScheduler()
-                viewModel.delete(selectedTask.id)
+                viewModel.delete(this, selectedTask.id)
                 Snackbar.make(btnUpdate, R.string.deleted_successful, Snackbar.LENGTH_LONG).show()
                 finish()
             }
