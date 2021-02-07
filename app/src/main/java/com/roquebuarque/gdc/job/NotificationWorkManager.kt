@@ -6,12 +6,11 @@ import android.content.Context
 import android.content.Context.NOTIFICATION_SERVICE
 import android.graphics.Color
 import android.os.Build
-import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.roquebuarque.gdc.R
-import com.roquebuarque.gdc.feature.task.add.ui.TaskAddActivity.Companion.SCHEDULE_EXTRA_TASK_NAME
+import com.roquebuarque.gdc.feature.task.add.ui.TaskAddActivity
 
 
 class NotificationWorkManager(context: Context, parameters: WorkerParameters) : Worker(
@@ -20,28 +19,27 @@ class NotificationWorkManager(context: Context, parameters: WorkerParameters) : 
 ) {
 
     private val PRIMARY_CHANNEL_ID = "primary_channel_id"
-    private val NOTIFICATION_ID = 0
-
     private var notificationWorkManager: NotificationManager? = null
 
     override fun doWork(): Result {
-        val name = inputData.getString(SCHEDULE_EXTRA_TASK_NAME)
+        val name = inputData.getString(TaskAddActivity.EXTRA_TASK_NAME)
+        val id = inputData.getLong(TaskAddActivity.EXTRA_TASK_ID, 0)
         return name?.let {
 
             createChannel()
 
-            sendNotification(it)
+            sendNotification(it, id)
             Result.success()
         } ?: Result.failure()
 
     }
 
-    private fun sendNotification(taskName: String) {
+    private fun sendNotification(taskName: String, taksId: Long) {
         val notificationBuilder: NotificationCompat.Builder =
             getNotificationBuilder(taskName)
 
         //Delivery notification
-        notificationWorkManager?.notify(NOTIFICATION_ID, notificationBuilder.build())
+        notificationWorkManager?.notify(taksId.toInt(), notificationBuilder.build())
     }
 
     private fun getNotificationBuilder(taskName: String): NotificationCompat.Builder {
